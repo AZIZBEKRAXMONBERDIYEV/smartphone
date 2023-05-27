@@ -133,14 +133,12 @@ def get_by_price_in_range(request: HttpRequest) -> JsonResponse:
 
         min = float(params.get('min'))
         max = float(params.get('max'))
+
+        phones = Phone.objects.filter(price__gte=min, price__lte=max)
         
-        result = []
-
-        for smartphone in Phone.objects.all():
-            if min <= smartphone.price and smartphone.price <= max:
-                result.append(to_dict(smartphone))
-
-        return JsonResponse(result, safe=False)
+        result = [to_dict(phone) for phone in phones]
+        
+        return JsonResponse({'result': result})
 
 
 
