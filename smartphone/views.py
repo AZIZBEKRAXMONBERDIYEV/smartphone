@@ -141,3 +141,17 @@ def get_by_price_in_range(request: HttpRequest) -> JsonResponse:
                 result.append(to_dict(smartphone))
 
         return JsonResponse(result, safe=False)
+
+
+
+def get_by_name(request: HttpRequest) -> JsonResponse:
+    if request.method == "GET":
+        params = request.GET
+
+        name = params.get('name', '')
+
+        phones = Phone.objects.filter(name__icontains=name)
+        
+        result = [to_dict(phone) for phone in phones]
+        
+        return JsonResponse({'result': result})
